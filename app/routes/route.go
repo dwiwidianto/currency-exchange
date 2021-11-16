@@ -10,6 +10,9 @@ func New() *echo.Echo {
 	e := echo.New()
 	e.GET("/users", controller.GetUserController)
 	e.POST("/users", controller.CreateUserController)
+	e.GET("/wallet", controller.GetWallet)
+	e.POST("/wallet", controller.CreateWallet)
+
 	return e
 
 }
