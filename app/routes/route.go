@@ -1,7 +1,7 @@
 package route
 
 import (
-	controller "widi443/currency-exchange/controllers"
+	controller "widi443/currency-exchange/app/controllers"
 
 	"github.com/labstack/echo/v4"
 )

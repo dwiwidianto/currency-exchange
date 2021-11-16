@@ -1,7 +1,7 @@
 package config
 
 import (
-	model "widi443/currency-exchange/models"
+	model "widi443/currency-exchange/app/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -10,7 +10,7 @@ import (
 var DBConnection *gorm.DB
 
 func InitDB() {
-	dsn := "host=172.21.0.2 user=root password=root dbname=db_currency-exchange port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	dsn := "host=localhost user=root password=root dbname=db_currency-exchange port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	var err error
 	DBConnection, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {

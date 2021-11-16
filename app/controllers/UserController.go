@@ -2,8 +2,8 @@ package controller
 
 import (
 	"net/http"
-	config "widi443/currency-exchange/configs"
-	model "widi443/currency-exchange/models"
+	config "widi443/currency-exchange/app/configs"
+	model "widi443/currency-exchange/app/models"
 
 	"github.com/labstack/echo/v4"
 )
