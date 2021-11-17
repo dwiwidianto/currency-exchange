@@ -23,6 +23,7 @@ func initMigrate() {
 	DBConnection.AutoMigrate(
 		&model.User{},
 		&model.Wallet{},
+		&model.Transaction{},
 	)
 
 }
