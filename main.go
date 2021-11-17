@@ -1,8 +1,9 @@
 package main
 
 import (
-	config "widi443/currency-exchange/configs"
-	route "widi443/currency-exchange/routes"
+	config "widi443/currency-exchange/app/configs"
+	route "widi443/currency-exchange/app/routes"
+
 )
 
 func main() {
