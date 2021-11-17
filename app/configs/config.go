@@ -20,10 +20,12 @@ func InitDB() {
 }
 
 func initMigrate() {
-	DBConnection.AutoMigrate(
+	err := DBConnection.AutoMigrate(
 		&model.User{},
 		&model.Wallet{},
-		&model.Transaction{},
 	)
+	if err != nil {
+		return
+	}
 
 }

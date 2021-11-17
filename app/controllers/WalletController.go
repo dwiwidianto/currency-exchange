@@ -36,7 +36,7 @@ func GetWallet(c echo.Context) error {
 		})
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"massage": "success",
+		"massage": "success get data Wallet",
 		"data":    wallet,
 	})
 }

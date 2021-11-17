@@ -5,16 +5,15 @@ import (
 	config "widi443/currency-exchange/app/configs"
 	model "widi443/currency-exchange/app/models"
 
-	"github.com/labstack/echo/v4"
+	echo "github.com/labstack/echo/v4"
 )
 
-func CreateUserController(c echo.Context) error {
 
+func CreateUserController(c echo.Context) error {
 	user := model.User{}
 	c.Bind(&user)
 
 	err := config.DBConnection.Save(&user).Error
-
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
 			"massage": err.Error(),
@@ -38,7 +37,7 @@ func GetUserController(c echo.Context) error {
 		})
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"massage": "success",
-		"data":    users,
+		"massage": "success getter User",
+		"Data":    users,
 	})
 }

@@ -7,12 +7,10 @@ import (
 )
 
 type Wallet struct {
-	ID            string `gorm:"size:20; not null;uniqueIndex;primary_key"`
-	User          User
-	UserID        string `gorm:"size: 20; index"`
-	Transaction   Transaction
-	TransactionID string `grom:"size: 255; index"`
-	CreatedAt     time.Time
-	UpdateAt      time.Time
-	DeletedAt     gorm.DeletedAt
+	ID        string    `gorm:"primaryKey"`
+	UserID    int       `json:"user_id"`
+	UserFK    User      `gorm:"foreignKey:UserID"`
+	CreatedAt time.Time `gorm:"autoCreateTime"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime"`
+	DeletedAt gorm.DeletedAt
 }

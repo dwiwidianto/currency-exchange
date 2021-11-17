@@ -1,9 +1,8 @@
 package route
 
 import (
-	controller "widi443/currency-exchange/app/controllers"
-
 	"github.com/labstack/echo/v4"
+	controller "widi443/currency-exchange/app/controllers"
 )
 
 func New() *echo.Echo {
