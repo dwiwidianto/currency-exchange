@@ -28,7 +28,7 @@ func CreateWallet(c echo.Context) error {
 func GetWallet(c echo.Context) error {
 	var wallet []model.Wallet
 
-	err := config.DBConnection.Find(&wallet).Error
+	err := config.DBConnection.Preload("User").Find(&wallet).Error
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
