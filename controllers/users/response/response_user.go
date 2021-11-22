@@ -18,6 +18,7 @@ type UserResponse struct {
 }
 
 func FromDomain(domain users.Domain) UserResponse {
+
 	return UserResponse{
 		ID:        domain.ID,
 		Name:      domain.Name,

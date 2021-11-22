@@ -20,18 +20,19 @@ func NewUserController(uc users.UserUseCaseInterface) *UserController {
 	}
 }
 
-func (controller *UserController) Login(c echo.Context) error {
+func (ctrl *UserController) Login(c echo.Context) error {
+
 	ctx := c.Request().Context()
 	var userLogin request.UserLogin
 	err := c.Bind(&userLogin)
+	user, err := ctrl.usecase.Login(*userLogin.ToDomain(), ctx)
 	if err != nil {
-		return controllers.ErrorResponse(c, http.StatusInternalServerError, "error binding", err)
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, "error binding", err)
 	}
-	user, err := controller.usecase.Login(*userLogin.ToDomain(), ctx)
-	return controllers.SuccessResponse(c, response.FromDomain(user))
+	return controllers.NewSuccessResponse(c, response.FromDomain(user))
 }
 
 func (controller *UserController) GetAllUsers(c echo.Context) error {
-	return controllers.SuccessResponse(c, response.UserResponse{})
+	return controllers.NewSuccessResponse(c, response.UserResponse{})
 
 }

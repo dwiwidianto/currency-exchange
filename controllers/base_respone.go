@@ -15,7 +15,7 @@ type BaseResponse struct {
 	Data interface{} `json:"data"`
 }
 
-func SuccessResponse(c echo.Context, data interface{}) error {
+func NewSuccessResponse(c echo.Context, data interface{}) error {
 	response := BaseResponse{}
 	response.Meta.Status = http.StatusOK
 	response.Meta.Message = "success"
@@ -23,7 +23,7 @@ func SuccessResponse(c echo.Context, data interface{}) error {
 	return c.JSON(http.StatusOK, response)
 }
 
-func ErrorResponse(c echo.Context, status int, err string, errs error) error {
+func NewErrorResponse(c echo.Context, status int, err string, errs error) error {
 	response := BaseResponse{}
 	response.Meta.Status = status
 	response.Meta.Message = err

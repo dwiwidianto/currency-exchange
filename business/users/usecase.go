@@ -20,7 +20,7 @@ func NewUseCase(userRepo UserRepoInterface, contextTimeout time.Duration) UserUs
 
 func (usecase *UserUseCase) Login(domain Domain, ctx context.Context) (Domain, error) {
 	if domain.Email == "" {
-		return Domain{}, errors.New("Password Empty")
+		return Domain{}, errors.New("Email Empty")
 	}
 	if domain.Password == "" {
 		return Domain{}, errors.New("Password Empty")

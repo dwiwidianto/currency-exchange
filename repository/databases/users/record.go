@@ -40,4 +40,5 @@ func FromDomain(domain users.Domain) User {
 		UpdatedAt: domain.UpdatedAt,
 		DeletedAt: domain.DeletedAt,
 	}
+
 }
