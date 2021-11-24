@@ -13,6 +13,8 @@ import (
 	_userUsecase "currency-exchange/business/users"
 	_userController "currency-exchange/controllers/users"
 	_userRepo "currency-exchange/repository/databases/users"
+	// _currencyUsecase "currency-exchange/business/currency"
+	// _currencyController "currency-exchange/controllers/currency"
 )
 
 func init() {
@@ -57,10 +59,13 @@ func main() {
 	userUsecase := _userUsecase.NewUseCase(userRepository, timeoutContext)
 	userCtrl := _userController.NewUserController(userUsecase)
 
+	// currencyController := _currencyController.NewPos
+	// currencyUsecase := _currencyUsecase.NewCurrencyApiUsecase(db)
+
 	routesInit := routes.RouteControllerList{
 		UserController: *userCtrl,
 	}
-
+	1
 	routesInit.RouteRegiester(e)
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }

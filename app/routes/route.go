@@ -3,7 +3,7 @@ package routes
 import (
 	userController "currency-exchange/controllers/users"
 
-	"github.com/labstack/echo/v4"
+	echo "github.com/labstack/echo/v4"
 )
 
 type RouteControllerList struct {
