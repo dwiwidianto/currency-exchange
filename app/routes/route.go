@@ -12,6 +12,6 @@ type RouteControllerList struct {
 
 func (controller RouteControllerList) RouteRegiester(c *echo.Echo) {
 	users := c.Group("/user")
-	users.GET("", controller.UserController.GetAllUsers)
+	// users.GET("", controller.UserController.GetAllUsers)
 	users.POST("/login", controller.UserController.Login)
 }

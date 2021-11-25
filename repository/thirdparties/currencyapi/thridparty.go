@@ -31,10 +31,9 @@ func (repo *Currencyapi) GetAll(ctx context.Context) (res currency.Domain, err e
 		return res, err
 	}
 	res = currency.Domain{}
-	for _, data := range bind {
-		res.Symbol = data.Symbol,
-		res.Name = data.Name,
-		res.BaseCurrency = data.BaseCurrency
+	for _, datafrom := range bind {
+		res.Query = datafrom.Query
+		res.Data = datafrom.Data
 	}
 	return res, nil
 }

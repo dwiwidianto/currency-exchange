@@ -65,7 +65,7 @@ func main() {
 	routesInit := routes.RouteControllerList{
 		UserController: *userCtrl,
 	}
-	1
+
 	routesInit.RouteRegiester(e)
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }
