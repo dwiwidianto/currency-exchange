@@ -11,28 +11,47 @@ import (
 )
 
 type UserController struct {
-	usecase users.UserUseCaseInterface
+	userUsecase users.UserUseCaseInterface
 }
 
-func NewUserController(uc users.UserUseCaseInterface) *UserController {
+func NewUserController(c *echo.Echo, uc users.UserUseCaseInterface) *UserController {
 	return &UserController{
-		usecase: uc,
+		userUsecase: uc,
 	}
 }
 
-func (ctrl *UserController) Login(c echo.Context) error {
+func (controller *UserController) GetAllUsersController(c echo.Context) error {
+	ctxNative := c.Request().Context()
+	data, err := controller.userUsecase.GetAll(ctxNative)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, response.FromUserListDomain(data))
+}
 
+func (controller *UserController) CreateUsersController(c echo.Context) error {
+	request := request.UserRegister{}
+	var err error
+	err = c.Bind(&request)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	ctxNative := c.Request().Context()
+	var data users.Domain
+	data, err = controller.userUsecase.Create(ctxNative, request.ToDomain())
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, response.FromDomainToCreateResponse(data))
+}
+
+func (ctrl *UserController) LoginController(c echo.Context) error {
 	ctx := c.Request().Context()
 	var userLogin request.UserLogin
 	err := c.Bind(&userLogin)
-	user, err := ctrl.usecase.Login(*userLogin.ToDomain(), ctx)
+	user, err := ctrl.userUsecase.Login(*userLogin.ToDomain(), ctx)
 	if err != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, "error binding", err)
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, response.FromDomain(user))
-}
-
-func (controller *UserController) GetAllUsers(c echo.Context) error {
-	return controllers.NewSuccessResponse(c, response.UserResponse{})
-
+	return controllers.NewSuccessResponse(c, response.FromUsersDomain(user))
 }

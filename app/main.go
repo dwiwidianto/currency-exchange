@@ -57,10 +57,7 @@ func main() {
 	e := echo.New()
 	userRepository := _userRepo.NewPosgresUserRepository(db)
 	userUsecase := _userUsecase.NewUseCase(userRepository, timeoutContext)
-	userCtrl := _userController.NewUserController(userUsecase)
-
-	// currencyController := _currencyController.NewPos
-	// currencyUsecase := _currencyUsecase.NewCurrencyApiUsecase(db)
+	userCtrl := _userController.NewUserController(e, userUsecase)
 
 	routesInit := routes.RouteControllerList{
 		UserController: *userCtrl,

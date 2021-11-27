@@ -25,7 +25,7 @@ func (jwtConf *ConfigJWT) init() middleware.JWTConfig {
 		Claims:     &JwtCustomClaims{},
 		SigningKey: []byte(jwtConf.SecretJWT),
 		ErrorHandlerWithContext: middleware.JWTErrorHandlerWithContext(func(e error, c echo.Context) error {
-			return controllers.NewErrorResponse(c, http.StatusForbidden, e.Error(), e)
+			return controllers.NewErrorResponse(c, http.StatusForbidden, e)
 		}),
 	}
 }
@@ -41,4 +41,12 @@ func (configJwt ConfigJWT) GenererateToken(userID int) string {
 	t := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
 	token, _ := t.SignedString([]byte(configJwt.SecretJWT))
 	return token
+}
+
+func GetUser(c echo.Context) (res *JwtCustomClaims) {
+	user := c.Get("user")
+	if user != nil {
+		res = user.(*JwtCustomClaims)
+	}
+	return res
 }
