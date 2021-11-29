@@ -17,8 +17,7 @@ type UserResponse struct {
 	DeletedAt gorm.DeletedAt `json:"deletedAt"`
 }
 
-func FromDomain(domain users.Domain) UserResponse {
-
+func FromUsersDomain(domain users.Domain) UserResponse {
 	return UserResponse{
 		ID:        domain.ID,
 		Name:      domain.Name,
@@ -26,6 +25,13 @@ func FromDomain(domain users.Domain) UserResponse {
 		Password:  domain.Password,
 		CreatedAt: domain.CreatedAt,
 		UpdatedAt: domain.UpdatedAt,
-		DeletedAt: domain.DeletedAt,
 	}
+}
+
+func FromUserListDomain(domain []users.Domain) []UserResponse {
+	var list []UserResponse
+	for _, v := range domain {
+		list = append(list, FromUsersDomain(v))
+	}
+	return list
 }

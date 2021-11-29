@@ -17,27 +17,34 @@ type User struct {
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
-func (user User) ToDomain() users.Domain {
-	return users.Domain{
-		ID:        user.ID,
-		Name:      user.Name,
-		Email:     user.Email,
-		Password:  user.Password,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-		DeletedAt: user.DeletedAt,
+func (rec *User) UserToDomain() (res *users.Domain) {
+	if rec != nil {
+		res = &users.Domain{
+			ID:        rec.ID,
+			Name:      rec.Name,
+			Email:     rec.Email,
+			Password:  rec.Password,
+			CreatedAt: rec.CreatedAt,
+			UpdatedAt: rec.UpdatedAt,
+		}
 	}
+	return res
 
 }
 
-func FromDomain(domain users.Domain) User {
-	return User{
-		ID:        domain.ID,
-		Name:      domain.Name,
-		Email:     domain.Email,
-		Password:  domain.Password,
-		CreatedAt: domain.CreatedAt,
-		UpdatedAt: domain.UpdatedAt,
-		DeletedAt: domain.DeletedAt,
+func FromDomain(domain *users.Domain) *User {
+	return &User{
+		ID:       domain.ID,
+		Name:     domain.Name,
+		Email:    domain.Email,
+		Password: domain.Password,
 	}
+}
+
+func UsersToListDomain(data []User) []users.Domain {
+	var list []users.Domain
+	for _, v := range data {
+		list = append(list, *v.UserToDomain())
+	}
+	return list
 }
