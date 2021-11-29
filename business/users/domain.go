@@ -19,6 +19,7 @@ type UserUseCaseInterface interface {
 	GetById(ctx context.Context, id int) (Domain, error)
 	Create(ctx context.Context, register *Domain) (Domain, error)
 	Login(domain Domain, ctx context.Context) (Domain, error)
+	Delete(ctx context.Context, id int) error
 }
 
 type UserRepoInterface interface {
@@ -27,4 +28,5 @@ type UserRepoInterface interface {
 	GetByEmailUsers(ctx context.Context, email string) (Domain, error)
 	CreateUsers(ctx context.Context, register *Domain) (Domain, error)
 	Login(domain Domain, ctx context.Context) (Domain, error)
+	DeleteUsers(ctx context.Context, id int) error
 }

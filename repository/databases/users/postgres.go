@@ -78,3 +78,15 @@ func (repo *UserRepository) CreateUsers(ctx context.Context, register *users.Dom
 	}
 	return *user.UserToDomain(), nil
 }
+
+func (repo *UserRepository) DeleteUsers(ctx context.Context, id int) error {
+	user := User{}
+	err := repo.db.Delete(&user, id)
+	if err.Error != nil {
+		return err.Error
+	}
+	if err.RowsAffected == 0 {
+		return errors.New("id not found")
+	}
+	return nil
+}

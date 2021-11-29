@@ -76,3 +76,12 @@ func (usecase *UserUseCase) GetById(ctx context.Context, id int) (Domain, error)
 	}
 	return user, nil
 }
+
+func (usecase *UserUseCase) Delete(ctx context.Context, id int) error {
+	err := usecase.repo.DeleteUsers(ctx, id)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
