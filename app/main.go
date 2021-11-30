@@ -55,7 +55,8 @@ func main() {
 
 	// Penghubung Layer
 	e := echo.New()
-	userRepository := _userRepo.NewPosgresUserRepository(db)
+	// Users
+	userRepository := _userRepo.NewPostgresUserRepository(db)
 	userUsecase := _userUsecase.NewUseCase(userRepository, timeoutContext)
 	userCtrl := _userController.NewUserController(e, userUsecase)
 
