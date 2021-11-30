@@ -34,14 +34,15 @@ func (usecase *UserUseCase) Create(ctx context.Context, domain *Domain) (Domain,
 	if !helpers.IsEmailValid(domain.Email) {
 		return Domain{}, helpers.ErrEmailNotValid
 	}
-	data, err := usecase.repo.GetByEmailUsers(ctx, domain.Email)
+	data, _ := usecase.repo.GetByEmailUsers(ctx, domain.Email)
+
 	if data.ID > 0 {
 		return Domain{}, helpers.ErrEmailHasBeenRegister
 	}
 	if domain.Password == "" {
 		return Domain{}, helpers.ErrPasswordRequired
 	}
-	domain.Password, _ = helpers.HashPassword(domain.Password)
+	// domain.Password, _ = helpers.HashPassword(domain.Password)
 	user, err := usecase.repo.CreateUsers(ctx, domain)
 
 	if err != nil {
@@ -52,10 +53,10 @@ func (usecase *UserUseCase) Create(ctx context.Context, domain *Domain) (Domain,
 
 func (usecase *UserUseCase) Login(domain Domain, ctx context.Context) (Domain, error) {
 	if domain.Email == "" {
-		return Domain{}, errors.New("Email Empty")
+		return Domain{}, errors.New("email empty")
 	}
 	if domain.Password == "" {
-		return Domain{}, errors.New("Password Empty")
+		return Domain{}, errors.New("password empty")
 	}
 
 	user, err := usecase.repo.Login(domain, ctx)
