@@ -15,7 +15,7 @@ type UserController struct {
 	userUsecase users.UserUseCaseInterface
 }
 
-func NewUserController(c *echo.Echo, uc users.UserUseCaseInterface) *UserController {
+func NewUserController(uc users.UserUseCaseInterface) *UserController {
 	return &UserController{
 		userUsecase: uc,
 	}
@@ -47,14 +47,21 @@ func (controller *UserController) CreateUsersController(c echo.Context) error {
 }
 
 func (controller *UserController) LoginController(c echo.Context) error {
+	var login users.Domain
+	var err error
+	var token string
 	ctx := c.Request().Context()
-	var userLogin request.UserLogin
-	err := c.Bind(&userLogin)
-	user, err := controller.userUsecase.Login(*userLogin.ToDomain(), ctx)
+
+	request := request.UserLogin{}
+	err = c.Bind(&request)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, response.FromUsersDomain(user))
+	login, token, err = controller.userUsecase.Login(ctx, request.Password, request.Email)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, response.FromUserToDomainLogin(login, token))
 }
 
 func (controller *UserController) DeleteUserController(c echo.Context) error {

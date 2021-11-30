@@ -2,20 +2,23 @@ package users
 
 import (
 	"context"
+	"currency-exchange/app/middlewares"
 	"currency-exchange/helpers"
-	"errors"
+	"log"
 	"time"
 )
 
 type UserUseCase struct {
-	repo UserRepoInterface
-	ctx  time.Duration
+	repo    UserRepoInterface
+	ctx     time.Duration
+	jwtAuth *middlewares.ConfigJWT
 }
 
-func NewUseCase(userRepo UserRepoInterface, contextTimeout time.Duration) UserUseCaseInterface {
+func NewUseCase(userRepo UserRepoInterface, contextTimeout time.Duration, jwtAuth *middlewares.ConfigJWT) *UserUseCase {
 	return &UserUseCase{
-		repo: userRepo,
-		ctx:  contextTimeout,
+		repo:    userRepo,
+		ctx:     contextTimeout,
+		jwtAuth: jwtAuth,
 	}
 }
 
@@ -50,20 +53,27 @@ func (usecase *UserUseCase) Create(ctx context.Context, domain *Domain) (Domain,
 	return user, nil
 }
 
-func (usecase *UserUseCase) Login(domain Domain, ctx context.Context) (Domain, error) {
-	if domain.Email == "" {
-		return Domain{}, errors.New("Email Empty")
+func (usecase *UserUseCase) Login(ctx context.Context, email string, password string) (Domain, string, error) {
+	if email == "" || password == "" {
+		return Domain{}, "", helpers.ErrUsernamePasswordNotFound
 	}
-	if domain.Password == "" {
-		return Domain{}, errors.New("Password Empty")
-	}
-
-	user, err := usecase.repo.Login(domain, ctx)
+	user, err := usecase.repo.GetByEmailUsers(ctx, email)
 
 	if err != nil {
-		return Domain{}, err
+		return Domain{}, "", err
 	}
-	return user, nil
+	if !helpers.CheckPassword(password, user.Password) {
+		return Domain{}, "", helpers.ErrInvalidAuthentication
+	}
+
+	token, errToken := usecase.jwtAuth.GenererateToken(user.ID, user.IsAdmin)
+	if errToken != nil {
+		log.Println(errToken)
+	}
+	if token == "" {
+		return Domain{}, "", helpers.ErrInvalidAuthentication
+	}
+	return user, token, nil
 }
 
 func (usecase *UserUseCase) GetById(ctx context.Context, id int) (Domain, error) {

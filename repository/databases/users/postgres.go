@@ -18,17 +18,17 @@ func NewPostgresUserRepository(gormDb *gorm.DB) users.UserRepoInterface {
 	}
 }
 
-func (repo *UserRepository) Login(domain users.Domain, ctx context.Context) (users.Domain, error) {
-	userDb := FromDomain(&domain)
-	err := repo.db.Where("email = ? AND password = ?", userDb.Email, userDb.Password).First(&userDb).Error
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return users.Domain{}, errors.New("Email not found")
-		}
-		return users.Domain{}, errors.New("Error in database")
-	}
-	return *userDb.UserToDomain(), nil
-}
+// func (repo *UserRepository) Login(domain users.Domain, ctx context.Context) (users.Domain, error) {
+// 	userDb := FromDomain(&domain)
+// 	err := repo.db.Where("email = ? AND password = ?", userDb.Email, userDb.Password).First(&userDb).Error
+// 	if err != nil {
+// 		if err == gorm.ErrRecordNotFound {
+// 			return users.Domain{}, errors.New("Email not found")
+// 		}
+// 		return users.Domain{}, errors.New("Error in database")
+// 	}
+// 	return *userDb.UserToDomain(), nil
+// }
 
 func (repo *UserRepository) FindByID(ctx context.Context, userID int) (users.Domain, error) {
 	rec := User{}
@@ -71,6 +71,7 @@ func (repo *UserRepository) CreateUsers(ctx context.Context, register *users.Dom
 		Name:     register.Name,
 		Email:    register.Email,
 		Password: register.Password,
+		IsAdmin:  register.IsAdmin,
 	}
 	err := repo.db.Create(&user)
 	if err.Error != nil {

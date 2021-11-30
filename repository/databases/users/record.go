@@ -12,8 +12,9 @@ type User struct {
 	Email     string
 	Name      string
 	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	IsAdmin   int            `gorm:"default:0"`
+	CreatedAt time.Time      `gorm:"autoCreateTime"`
+	UpdatedAt time.Time      `gorm:"autoUpdateTime"`
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
@@ -24,6 +25,7 @@ func (rec *User) UserToDomain() (res *users.Domain) {
 			Name:      rec.Name,
 			Email:     rec.Email,
 			Password:  rec.Password,
+			IsAdmin:   rec.IsAdmin,
 			CreatedAt: rec.CreatedAt,
 			UpdatedAt: rec.UpdatedAt,
 		}
@@ -34,10 +36,13 @@ func (rec *User) UserToDomain() (res *users.Domain) {
 
 func FromDomain(domain *users.Domain) *User {
 	return &User{
-		ID:       domain.ID,
-		Name:     domain.Name,
-		Email:    domain.Email,
-		Password: domain.Password,
+		ID:        domain.ID,
+		Name:      domain.Name,
+		Email:     domain.Email,
+		Password:  domain.Password,
+		IsAdmin:   domain.IsAdmin,
+		CreatedAt: domain.CreatedAt,
+		UpdatedAt: domain.UpdatedAt,
 	}
 }
 
