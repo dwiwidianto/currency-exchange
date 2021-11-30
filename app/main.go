@@ -13,6 +13,9 @@ import (
 	_userUsecase "currency-exchange/business/users"
 	_userController "currency-exchange/controllers/users"
 	_userRepo "currency-exchange/repository/databases/users"
+
+	_transactionUsecase "currency-exchange/business/transactions"
+	_transactionRepo "currency-exchange/repository/databases/transactions"
 	// _currencyUsecase "currency-exchange/business/currency"
 	// _currencyController "currency-exchange/controllers/currency"
 )
@@ -32,6 +35,7 @@ func init() {
 func dbMigrate(db *gorm.DB) {
 	err := db.AutoMigrate(
 		&_userRepo.User{},
+		&_transactionRepo.Transactions{},
 	)
 	if err != nil {
 		panic(err)
@@ -55,9 +59,14 @@ func main() {
 
 	// Penghubung Layer
 	e := echo.New()
-	userRepository := _userRepo.NewPosgresUserRepository(db)
+	// Users
+	userRepository := _userRepo.NewPostgresUserRepository(db)
 	userUsecase := _userUsecase.NewUseCase(userRepository, timeoutContext)
 	userCtrl := _userController.NewUserController(e, userUsecase)
+
+	// Transaction
+	transactionRepository := _transactionRepo.NewPostgresTransactionRepo(db)
+	transactionUsease := _transactionUsecase.NewTransactionUsecase(transactionRepository, timeoutContext)
 
 	routesInit := routes.RouteControllerList{
 		UserController: *userCtrl,
