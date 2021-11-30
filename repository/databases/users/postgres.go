@@ -12,7 +12,7 @@ type UserRepository struct {
 	db *gorm.DB
 }
 
-func NewPosgresUserRepository(gormDb *gorm.DB) users.UserRepoInterface {
+func NewPostgresUserRepository(gormDb *gorm.DB) users.UserRepoInterface {
 	return &UserRepository{
 		db: gormDb,
 	}
