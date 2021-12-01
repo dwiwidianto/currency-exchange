@@ -17,6 +17,10 @@ import (
 	_transactionUsecase "currency-exchange/business/transactions"
 	_transactionController "currency-exchange/controllers/transactions"
 	_transactionRepo "currency-exchange/repository/databases/transactions"
+
+	_walletUsecase "currency-exchange/business/wallets"
+	_walletController "currency-exchange/controllers/wallets"
+	_walletRepo "currency-exchange/repository/databases/wallets"
 	// _currencyUsecase "currency-exchange/business/currency"
 	// _currencyController "currency-exchange/controllers/currency"
 )
@@ -37,6 +41,7 @@ func dbMigrate(db *gorm.DB) {
 	err := db.AutoMigrate(
 		&_userRepo.User{},
 		&_transactionRepo.Transactions{},
+		&_walletRepo.Wallet{},
 	)
 	if err != nil {
 		panic(err)
@@ -69,9 +74,14 @@ func main() {
 	transactionsUsecase := _transactionUsecase.NewUseCase(transactionsRepository)
 	transactionsCtrl := _transactionController.NewTransactionController(transactionsUsecase)
 
+	walletRepository := _walletRepo.NewPostgresWalletRepository(db)
+	walletUsecase := _walletUsecase.NewUseCase(walletRepository, timeoutContext)
+	walletCtrl := _walletController.NewWalletController(e, walletUsecase)
+
 	routesInit := routes.RouteControllerList{
 		UserController:        *userCtrl,
 		TransactionController: *transactionsCtrl,
+		WalletController:      *walletCtrl,
 	}
 
 	routesInit.RouteRegiester(e)

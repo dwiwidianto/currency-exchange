@@ -3,6 +3,7 @@ package routes
 import (
 	transactionController "currency-exchange/controllers/transactions"
 	userController "currency-exchange/controllers/users"
+	walletController "currency-exchange/controllers/wallets"
 
 	echo "github.com/labstack/echo/v4"
 )
@@ -10,6 +11,7 @@ import (
 type RouteControllerList struct {
 	UserController        userController.UserController
 	TransactionController transactionController.TransactionController
+	WalletController      walletController.WalletController
 }
 
 func (controller RouteControllerList) RouteRegiester(c *echo.Echo) {
@@ -24,5 +26,9 @@ func (controller RouteControllerList) RouteRegiester(c *echo.Echo) {
 	transaction.GET("", controller.TransactionController.GetAllTransactionController)
 	transaction.POST("/create", controller.TransactionController.CreateTransactionController)
 	transaction.DELETE("/:transactionId", controller.TransactionController.CreateTransactionController)
+
+	wallet := c.Group("wallet")
+	wallet.GET("", controller.WalletController.GetAllWalletController)
+	wallet.POST("/create", controller.WalletController.DeleteUserController)
 
 }
