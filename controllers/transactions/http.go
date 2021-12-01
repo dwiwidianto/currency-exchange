@@ -32,6 +32,22 @@ func (controller *TransactionController) CreateTransactionController(c echo.Cont
 	return controllers.NewSuccessResponse(c, response.FromDomain(inputs))
 }
 
+// func (controller *TransactionController) CreateTransactionController(c echo.Context) error {
+// 	request := request.CreateTransaction{}
+// 	var err error
+// 	err = c.Bind(&request)
+// 	if err != nil {
+// 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+// 	}
+// 	// ctxNative := c.Request().Context()
+// 	var data transactions.Domain
+// 	data, err = controller.usecase.CreateTransaction(*request.ToDomain())
+// 	if err != nil {
+// 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+// 	}
+// 	return controllers.NewSuccessResponse(c, response.FromDomain(data))
+// }
+
 func (controller *TransactionController) GetAllTransactionController(c echo.Context) error {
 	ctx := c.Request().Context()
 	data, err := controller.usecase.GetAllTransaction(ctx)
@@ -39,11 +55,10 @@ func (controller *TransactionController) GetAllTransactionController(c echo.Cont
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	return controllers.NewSuccessResponse(c, response.FromListDomain(data))
-
 }
 
 func (controller *TransactionController) DeleteTransactionController(c echo.Context) error {
-	getId := c.Param("id")
+	getId := c.Param("transactionId")
 	id, err := helpers.StringToInt(getId)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusBadRequest, err)

@@ -20,6 +20,9 @@ func (controller RouteControllerList) RouteRegiester(c *echo.Echo) {
 	users.POST("/login", controller.UserController.LoginController)
 	users.DELETE("/:userId", controller.UserController.DeleteUserController)
 
-	transaction := c.Group("trans")
+	transaction := c.Group("transaction")
 	transaction.GET("", controller.TransactionController.GetAllTransactionController)
+	transaction.POST("/create", controller.TransactionController.CreateTransactionController)
+	transaction.DELETE("/:transactionId", controller.TransactionController.CreateTransactionController)
+
 }
