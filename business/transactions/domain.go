@@ -2,6 +2,7 @@ package transactions
 
 import (
 	"context"
+	"currency-exchange/repository/databases/users"
 	"time"
 
 	"gorm.io/gorm"
@@ -15,16 +16,18 @@ type Domain struct {
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	DeletedAt    gorm.DeletedAt
+	User         users.User
+	UserID       int
 }
 
 type TransactionUseCaseInterfaces interface {
-	CreateTranasaction(domain Domain) (Domain, error)
+	CreateTransaction(domain Domain) (Domain, error)
 	GetAllTransaction(ctx context.Context) ([]Domain, error)
-	DeleteTranasction(ctx context.Context, id uint) error
+	DeleteTransaction(ctx context.Context, id uint) error
 }
 
 type TransactionRepoInterfaces interface {
-	CreateTranasaction(domain Domain) (Domain, error)
+	CreateTransaction(domain Domain) (Domain, error)
 	GetAllTransaction(ctx context.Context) ([]Domain, error)
-	DeleteTranasction(ctx context.Context, id uint) error
+	DeleteTransaction(ctx context.Context, id uint) error
 }

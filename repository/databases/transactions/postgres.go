@@ -18,7 +18,7 @@ func NewPostgresRepository(gormDb *gorm.DB) transactions.TransactionRepoInterfac
 	}
 }
 
-func (repo *TransactionRepository) InsertNewDataPenduduks(domain transactions.Domain) (transactions.Domain, error) {
+func (repo *TransactionRepository) CreateTransaction(domain transactions.Domain) (transactions.Domain, error) {
 	userInput := FromDomain(domain)
 
 	if err := repo.db.Create(&userInput).Error; err != nil {
@@ -40,7 +40,7 @@ func (repo *TransactionRepository) GetAllTransaction(ctx context.Context) ([]tra
 	return ListTransactionToDomain(transactionsDB), nil
 }
 
-func (repo *TransactionRepository) DeleteDataPenduduks(ctx context.Context, id uint) error {
+func (repo *TransactionRepository) DeleteTransaction(ctx context.Context, id uint) error {
 	data := Transactions{}
 	err := repo.db.Delete(&data, id)
 	if err.Error != nil {

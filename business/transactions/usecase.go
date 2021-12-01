@@ -15,7 +15,7 @@ func NewUseCase(transactionRepo TransactionRepoInterfaces) TransactionUseCaseInt
 	}
 }
 
-func (usecase *TransactionUseCase) CreateTranasaction(domain Domain) (Domain, error) {
+func (usecase *TransactionUseCase) CreateTransaction(domain Domain) (Domain, error) {
 	if domain.BaseCurrency == "" {
 		return Domain{}, errors.New("KK id cannot be empty")
 	}
@@ -26,7 +26,7 @@ func (usecase *TransactionUseCase) CreateTranasaction(domain Domain) (Domain, er
 		return Domain{}, errors.New("Nama cannot be empty")
 	}
 
-	penduduk, err := usecase.repo.CreateTranasaction(domain)
+	penduduk, err := usecase.repo.CreateTransaction(domain)
 	if err != nil {
 		return Domain{}, err
 	}
@@ -41,8 +41,8 @@ func (usecase *TransactionUseCase) GetAllTransaction(ctx context.Context) ([]Dom
 	return data, nil
 }
 
-func (usecase *TransactionUseCase) DeleteTranasction(ctx context.Context, id uint) error {
-	err := usecase.repo.DeleteTranasction(ctx, id)
+func (usecase *TransactionUseCase) DeleteTransaction(ctx context.Context, id uint) error {
+	err := usecase.repo.DeleteTransaction(ctx, id)
 	if err != nil {
 		return err
 	}

@@ -3,9 +3,9 @@ package request
 import "currency-exchange/business/transactions"
 
 type CreateTransaction struct {
-	BaseCurrency string  `json:""`
-	SwapCurrency float64 `json:""`
-	Total        float64 `json:""`
+	BaseCurrency string  `json:"base_currency"`
+	SwapCurrency float64 `json:"swap_currency"`
+	Total        float64 `json:"total"`
 }
 
 func (transaction *CreateTransaction) ToDomain() *transactions.Domain {

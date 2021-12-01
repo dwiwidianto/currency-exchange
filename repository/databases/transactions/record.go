@@ -2,6 +2,7 @@ package transactions
 
 import (
 	"currency-exchange/business/transactions"
+	"currency-exchange/repository/databases/users"
 	"time"
 
 	"gorm.io/gorm"
@@ -15,6 +16,8 @@ type Transactions struct {
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	DeletedAt    gorm.DeletedAt `gorm:"index"`
+	UserID       int
+	User         users.User `gorm:"foreignKey:UserID;references:ID"`
 }
 
 func (transaction Transactions) ToDomain() transactions.Domain {
@@ -26,6 +29,8 @@ func (transaction Transactions) ToDomain() transactions.Domain {
 		CreatedAt:    transaction.UpdatedAt,
 		UpdatedAt:    transaction.UpdatedAt,
 		DeletedAt:    transaction.DeletedAt,
+		User:         transaction.User,
+		UserID:       transaction.UserID,
 	}
 }
 
@@ -38,6 +43,7 @@ func FromDomain(domain transactions.Domain) Transactions {
 		CreatedAt:    domain.UpdatedAt,
 		UpdatedAt:    domain.UpdatedAt,
 		DeletedAt:    domain.DeletedAt,
+		UserID:       domain.UserID,
 	}
 }
 
