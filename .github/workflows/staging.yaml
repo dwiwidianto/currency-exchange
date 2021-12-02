@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: action/chechout@v2
+      - uses: action/checkout@v2
 
       - name: Set up Go
         uses: actions/setup-go@v2
