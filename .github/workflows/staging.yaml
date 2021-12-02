@@ -16,9 +16,11 @@ jobs:
           go-version: 1.17
       - name: running test
         run: go test ./... -cover
+
   build-push-docker:
     name: "build images and push docker to docker registry"
     runs-on: ubuntu-20.04
+    needs: unit-test
     steps:
       - uses: actions/checkout@v2
       - name: add config.json
@@ -34,3 +36,33 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN_REGISTRY }}
       - name: Push Image to Docker Registry
         run: docker push dwiwidianto/kampus_merdeka:latest
+  
+  deploy-to-ec2:
+    name: "deploy to AMI 2 ec2"
+    runs-on: ubuntu-20.04
+    needs: build-push-docker
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configuration SSH
+        env:
+         SSH_USER: ${{ secrets.EC2_USER }}
+         SSH_KEY: ${{ secrets.EC2_PEM }}
+         SSH_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/ec2.pem
+          chmod 400 ~/.ssh/ec2.pem
+          cat >> ~/.ssh/config << END
+          Host Deployment
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/ec2.pem
+            StrictHostKeyChecking=no
+          END
+      - name: Connect EC2, Remove Container
+        run: ssh development 'docker rm -f $(docker ps -a -q)' || true
+      - name: Pull from Registry
+        run: docker pull dwiwidianto/kampus_merdeka:latest
+      - name: Run Docker Container
+        run: docker run -d --name container_service dwiwidianto/kampus_merdeka:latest
+       
