@@ -6,7 +6,7 @@ on:
 jobs:
   unit-test:
     name: "unit test"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     
     steps:
       - uses: actions/checkout@v2
@@ -16,4 +16,17 @@ jobs:
           go-version: 1.17
       - name: running test
         run: go test ./... -cover
-
+  build-push-docker:
+    name: "build images and push docker to docker registry"
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build . -f Dockerfile -t dwiwidianto/kampus_merdeka:$(date +%s)
+      - name: Login to Dockerhub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME_REGISTRY}}
+          password: ${{ DOCKER_TOKEN_REGISTRY }}
+      - name: Push Image to Docker Registry
+        run: docker push dwiwidianto/kampus_merdeka:latest
