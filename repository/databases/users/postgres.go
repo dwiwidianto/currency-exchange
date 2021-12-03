@@ -30,15 +30,6 @@ func (repo *UserRepository) Login(domain users.Domain, ctx context.Context) (use
 	return *userDb.UserToDomain(), nil
 }
 
-func (repo *UserRepository) FindByID(ctx context.Context, userID int) (users.Domain, error) {
-	rec := User{}
-	err := repo.db.Where("user.id = ?", userID).First(&rec).Error
-	if err != nil {
-		return users.Domain{}, err
-	}
-	return *rec.UserToDomain(), nil
-}
-
 func (repo *UserRepository) GetAllUsers(ctx context.Context) ([]users.Domain, error) {
 	var data []User
 	err := repo.db.Find(&data)

@@ -6,7 +6,6 @@ RUN go mod download
 RUN go build -o main
 RUN go clean --modcache
 
-
 # STAGE 2
 FROM alpine:3.15
 WORKDIR /app

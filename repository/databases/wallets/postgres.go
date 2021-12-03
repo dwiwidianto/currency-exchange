@@ -31,7 +31,7 @@ func (repo *WalletRepository) CreateWallets(ctx context.Context, createTableWall
 	wallet := Wallet{
 		Total:         createTableWallet.Total,
 		UserID:        createTableWallet.UserID,
-		TransactionID: createTableWallet.UserID,
+		TransactionID: createTableWallet.TransactionID,
 	}
 	err := repo.db.Create(&wallet)
 	if err.Error != nil {
