@@ -12,7 +12,7 @@ type UserUseCase struct {
 	ctx  time.Duration
 }
 
-func NewUseCase(userRepo UserRepoInterface, contextTimeout time.Duration) UserUseCaseInterface {
+func NewUseCase(userRepo UserRepoInterface, contextTimeout time.Duration) *UserUseCase {
 	return &UserUseCase{
 		repo: userRepo,
 		ctx:  contextTimeout,
